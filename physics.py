@@ -20,11 +20,11 @@ class Physics(Measurement):
 
     def collision(self, obj, r):
         if r < (self.radius + obj.radius):
+            # self.speedx = ((self.mass - obj.mass) * self.speedx) / (self.mass + obj.mass)
+            # self.speedy = ((self.mass - obj.mass) * self.speedy) / (self.mass + obj.mass)
             self.speedx += obj.speedx
             self.speedy += obj.speedy
-            return True
-        else:
-            return False
+
 
     def absorption(self, obj):
         if self.mass == max(self.mass, obj.mass):
@@ -52,24 +52,23 @@ class Planet(Physics):
         for obj in planets:
             if obj.name != self.name:
                 r = self.measure_distance(obj.x, obj.y)
-                if self.collision(obj, r):
-                    print("collition")
-                    self.absorption(obj)
+                self.collision(obj, r)
+                #self.absorption(obj)
                 self.gravity(obj.mass, obj.x, obj.y, r)
 
 
 
 planets = [
 # Star system
-Planet("Sun", 5000, 50, (600, 400), (0, 0), (255, 100, 100)),
-Planet("mercury", 50, 5, (600, 200), (-2.5, 0), (255, 10, 100)),
-Planet("Venus", 60, 6, (600, 900), (1.5, 0), (236, 193, 19)),
-Planet("Earth", 100, 10, (1400, 400), (0, -1.3), "blue"),
-Planet("Mars", 80, 8, (-600, 400), (0, 1), "red")
+# Planet("Sun", 5000, 50, (600, 400), (0, 0), (255, 100, 100)),
+# Planet("mercury", 50, 5, (600, 200), (-2.5, 0), (255, 10, 100)),
+# Planet("Venus", 60, 6, (600, 900), (1.5, 0), (236, 193, 19)),
+# Planet("Earth", 100, 10, (1400, 400), (0, -1.3), "blue"),
+# Planet("Mars", 80, 8, (-600, 400), (0, 1), "red")
 # collade test
-#     Planet("P1", 50, 5, (635, 368), (0, 0), "green"),
-#     Planet("P1", 50, 5, (435, 365), (0, 0), "blue"),
-#     Planet("S1", 100, 10, (412, 556), (0, 0), (255, 100, 100)),
-#     Planet("S2", 100, 10, (648, 548), (0, 0), 'red')
+    Planet("P1", 50, 5, (635, 368), (0, 0), "green"),
+    Planet("P1", 50, 5, (435, 365), (0, 0), "blue"),
+    Planet("S1", 100, 10, (412, 556), (0, 0), (255, 100, 100)),
+    Planet("S2", 100, 10, (648, 548), (0, 0), 'red')
           ]
 
