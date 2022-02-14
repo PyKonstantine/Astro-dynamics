@@ -78,6 +78,7 @@ class Graphic:
 
 class Background:
 
+    """ надо реализовать появления и исчезновение звезд вышедших за границу экрана"""
     stars = []
 
     def __init__(self):
@@ -91,7 +92,7 @@ class Background:
         self.x = random.randint(0, Graphic.WIDTH)
         self.y = random.randint(0, Graphic.HEIGHT)
         self.color = random.choice([
-            'red', 'blue', 'yellow', 'white', 'orange'
+            'yellow', 'white', 'orange'
         ])
         self.distance = random.choice([0.1, 1, 0.5])
         # self.radius = random.randint(1, 2)
