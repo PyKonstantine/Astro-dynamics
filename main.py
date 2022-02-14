@@ -1,7 +1,7 @@
 import sys
 import pygame as pg
 from graphic import Graphic
-from physics import planets
+from physics_objects import planets
 
 
 class App:
