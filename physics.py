@@ -3,14 +3,22 @@ import math
 
 class Measurement:
 
+    def __init__(self):
+        self.x = None
+        self.y = None
+
     def measure_distance(self, x, y):
-        return  math.sqrt((self.x - x) ** 2 + (self.y - y) ** 2)
+        return math.sqrt((self.x - x) ** 2 + (self.y - y) ** 2)
 
 
 class Physics(Measurement):
 
-    def update_circle_object(self):
-        self.all_object[self.name] = (self.mass, self.x, self.y, self.radius)
+    def __init__(self):
+        super().__init__()
+        self.radius = None
+        self.mass = None
+        self.speedx = None
+        self.speedy = None
 
     def gravity(self, mass, x, y, r):
         self.speedx += mass * (x - self.x) / r ** 3  # Fx
@@ -20,25 +28,26 @@ class Physics(Measurement):
 
     def collision(self, obj, r):
         if r < (self.radius + obj.radius):
+            return True
             # self.speedx = ((self.mass - obj.mass) * self.speedx) / (self.mass + obj.mass)
             # self.speedy = ((self.mass - obj.mass) * self.speedy) / (self.mass + obj.mass)
-            self.speedx += obj.speedx
-            self.speedy += obj.speedy
-
+            # self.speedx += obj.speedx
+            # self.speedy += obj.speedy
 
     def absorption(self, obj):
         if self.mass == max(self.mass, obj.mass):
-            S_self = math.pi * self.radius ** 2
-            S_obj = math.pi * obj.radius ** 2
-            S_0 = S_self + S_obj
+            s_self = math.pi * self.radius ** 2
+            s_obj = math.pi * obj.radius ** 2
+            s_0 = s_self + s_obj
             self.mass += obj.mass
-            self.radius = int(math.sqrt(S_0 / math.pi))
+            self.radius = int(math.sqrt(s_0 / math.pi))
             planets.remove(obj)
 
 
 class Planet(Physics):
 
     def __init__(self, name, mass, radius, pos: tuple, speed: tuple, color):
+        super().__init__()
         self.color = color
         self.name = name
         self.mass = mass
@@ -52,23 +61,30 @@ class Planet(Physics):
         for obj in planets:
             if obj.name != self.name:
                 r = self.measure_distance(obj.x, obj.y)
-                self.collision(obj, r)
-                #self.absorption(obj)
+
+                if self.collision(obj, r):
+                    continue
                 self.gravity(obj.mass, obj.x, obj.y, r)
+                self.collision(obj, r)
+                self.absorption(obj)
 
 
+#  --------------------------------------------objects-init-------------------------------------------------------------
 
 planets = [
-# Star system
-# Planet("Sun", 5000, 50, (600, 400), (0, 0), (255, 100, 100)),
-# Planet("mercury", 50, 5, (600, 200), (-2.5, 0), (255, 10, 100)),
-# Planet("Venus", 60, 6, (600, 900), (1.5, 0), (236, 193, 19)),
-# Planet("Earth", 100, 10, (1400, 400), (0, -1.3), "blue"),
-# Planet("Mars", 80, 8, (-600, 400), (0, 1), "red")
-# collade test
+    # Star system
+    # Planet("Sun", 5000, 50, (600, 400), (0, 0), (255, 100, 100)),
+    # Planet("mercury", 50, 5, (600, 200), (-2.5, 0), (255, 10, 100)),
+    # Planet("Venus", 60, 6, (600, 900), (1.5, 0), (236, 193, 19)),
+    # Planet("Earth", 100, 10, (1400, 400), (0, -1.3), "blue"),
+    # Planet("Mars", 80, 8, (-600, 400), (0, 1), "red")
+    # collate test
     Planet("P1", 50, 5, (635, 368), (0, 0), "green"),
     Planet("P1", 50, 5, (435, 365), (0, 0), "blue"),
     Planet("S1", 100, 10, (412, 556), (0, 0), (255, 100, 100)),
-    Planet("S2", 100, 10, (648, 548), (0, 0), 'red')
+    Planet("S2", 100, 10, (648, 548), (0, 0), 'red'),
+    Planet("S3", 100, 10, (550, 251), (0, 0), 'yellow'),
+    Planet("S4", 200, 15, (650, 251), (0, 0), 'white'),
+    Planet("P1", 50, 5, (535, 368), (0, 0), "blue"),
+    Planet("P1", 50, 5, (635, 468), (0, 0), "green")
           ]
-

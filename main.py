@@ -11,7 +11,7 @@ class App:
     def __init__(self):
         self.graphic = Graphic()
         self.planets = planets
-        self.runing = True
+        self.running = True
 
     @staticmethod
     def exit(key):
@@ -21,7 +21,7 @@ class App:
 
     def run(self):
 
-        while self.runing:
+        while self.running:
 
             key = pg.key.get_pressed()
             self.exit(key)
@@ -40,7 +40,6 @@ class App:
                 obj.update()
 
             self.graphic.display(self.planets)
-
 
 
 if __name__ == "__main__":
