@@ -117,7 +117,8 @@ class Graphic:
 
         self.blit_text(f'fps: {int(self.clock.get_fps())}', (10, 10))
         self.blit_text(f'zoom: {round(self.zoom, 3)}', (10, 30))
+        self.blit_text('to move cam press (up) (down) (left) (right) button', (self.WIDTH - 250, 10))
+        self.blit_text('to zoom press (home) (end) button', (self.WIDTH - 176, 30))
 
         pg.display.update()
         self.clock.tick(self.FPS)
-
