@@ -2,6 +2,60 @@ import random
 import pygame as pg
 
 
+class Background:
+
+    stars = []
+    cam_x = 0
+    cam_y = 0
+
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.color = (0, 0, 0)
+        self.distance = 1
+        self.radius = 1
+
+    def random_position_init(self, w, h):
+        self.x = random.randint(0, w)
+        self.y = random.randint(0, h)
+        self.color = random.choice([(255, 255, 200), (255, 255, 255), (255, 200, 200), (255, 200, 0), (200, 200, 255)])
+        self.distance = random.choice([2.5, 1.1, 1.7, 1.05, 1.35, 1.005, 1.5, 1.45])
+        self.radius = random.randint(1, 1)
+
+    def set_stars_number(self, number, width, height):
+        for i in range(number):
+            s = Background()
+            s.random_position_init(width, height)
+            self.stars.append(s)
+
+    def draw(self, screen):
+        for s in self.stars:
+            x = s.x + self.cam_x / s.distance
+            y = s.y + self.cam_y / s.distance
+            if x > 1200:
+                s.x -= 1200
+            if x < 0:
+                s.x += 1200
+            if y > 800:
+                s.y -= 800
+            if y < 0:
+                s.y += 800
+            pg.draw.circle(screen, s.color, (x, y), s.radius)
+
+    def cam_move(self, key):
+        if key[pg.K_UP]:
+            self.cam_y += 0.3
+        if key[pg.K_DOWN]:
+            self.cam_y -= 0.3
+        if key[pg.K_LEFT]:
+            self.cam_x += 0.3
+        if key[pg.K_RIGHT]:
+            self.cam_x -= 0.3
+
+    def get_stars(self):
+        return self.stars
+
+
 class Graphic:
 
     pg.display.set_caption("Astro dynamics")
@@ -12,27 +66,22 @@ class Graphic:
     def __init__(self):
         self.clock = pg.time.Clock()
         self.screen = pg.display.set_mode((self.WIDTH, self.HEIGHT), pg.RESIZABLE)
-        self.background = b.get_stars()
+        self.background = Background()
+        self.background.set_stars_number(500, self.WIDTH, self.HEIGHT)
         self.font = pg.font.Font(None, 15)
         self.cam_x = 0
         self.cam_y = 0
-        self.zoom = 1
-        self.back_x = 0
-        self.back_y = 0
+        self.zoom = 0.3
 
     def cam_move(self, key):
         if key[pg.K_UP]:
             self.cam_y -= 2 / self.zoom * 2
-            self.back_y -= 0.1
         if key[pg.K_DOWN]:
             self.cam_y += 2 / self.zoom * 2
-            self.back_y += 0.1
         if key[pg.K_LEFT]:
             self.cam_x -= 2 / self.zoom * 2
-            self.back_x -= 0.1
         if key[pg.K_RIGHT]:
             self.cam_x += 2 / self.zoom * 2
-            self.back_x += 0.1
 
     def cam_zoom(self, key):
         if key[pg.K_HOME]:
@@ -46,14 +95,11 @@ class Graphic:
         text_img = self.font.render(text, True, color)
         self.screen.blit(text_img, pos)
 
-    def background_draw(self):
-        for s in self.background:
-            pg.draw.circle(self.screen, s.color, (s.x - self.back_x * s.distance, s.y - self.back_y * s.distance), s.radius)
-
     def display(self, circle):
+        """need to refactor this method"""
         self.screen.fill((0, 0, 0))
 
-        self.background_draw()
+        self.background.draw(self.screen)
     # ------------------------------------zoom-display--------------------------------------
 
         for obj in circle:
@@ -75,37 +121,3 @@ class Graphic:
         pg.display.update()
         self.clock.tick(self.FPS)
 
-
-class Background:
-
-    """ надо реализовать появления и исчезновение звезд вышедших за границу экрана"""
-    stars = []
-
-    def __init__(self):
-        self.x = None
-        self.y = None
-        self.color = None
-        self.distance = None
-        self.radius = 1
-
-    def random_position_init(self):
-        self.x = random.randint(0, Graphic.WIDTH)
-        self.y = random.randint(0, Graphic.HEIGHT)
-        self.color = random.choice([
-            'yellow', 'white', 'orange'
-        ])
-        self.distance = random.choice([0.1, 1, 0.5])
-        # self.radius = random.randint(1, 2)
-
-    def init(self, number):
-        for i in range(number):
-            s = Background()
-            s.random_position_init()
-            self.stars.append(s)
-
-    def get_stars(self):
-        return self.stars
-
-
-b = Background()
-b.init(300)

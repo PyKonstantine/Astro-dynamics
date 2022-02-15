@@ -24,9 +24,11 @@ class App:
         while self.running:
 
             key = pg.key.get_pressed()
-            self.exit(key)
+
             self.graphic.cam_move(key)
             self.graphic.cam_zoom(key)
+            self.graphic.background.cam_move(key)
+            self.exit(key)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
