@@ -9,7 +9,7 @@ class App:
     pg.init()
 
     def __init__(self):
-        self.graphic = Graphic()
+        self.graphic = Graphic(1200, 800)
         self.planets = planets
         self.running = True
 
