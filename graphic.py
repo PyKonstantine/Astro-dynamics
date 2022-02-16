@@ -59,14 +59,17 @@ class BackgroundStars:
 
 
 class Graphic:
+
     pg.display.set_caption("Astro dynamics")
+    FULL_SCREEN = -2147483648
+    RESIZABLE = 16
 
     def __init__(self, width, height):
         self.WIDTH = width
         self.HEIGHT = height
         self.FPS = 60
         self.clock = pg.time.Clock()
-        self.screen = pg.display.set_mode((self.WIDTH, self.HEIGHT), pg.RESIZABLE)
+        self.screen = pg.display.set_mode((self.WIDTH, self.HEIGHT), self.RESIZABLE)
         self.milkyway_img = pg.transform.scale(milkyway, (self.WIDTH, self.HEIGHT)).convert_alpha()
         self.milkyway_img.set_alpha(100)
         self.background = BackgroundStars()
@@ -105,6 +108,7 @@ class Graphic:
         self.blit_text('to zoom press (home) (end) button', (self.WIDTH - 176, 30))
 
     def draw_circle(self, obj):
+
         for o in obj:
             normal_x = self.zoom * (-(self.WIDTH / 2) + (o.x - self.cam_x))
             normal_y = self.zoom * ((self.HEIGHT / 2) - (o.y - self.cam_y))
@@ -117,7 +121,6 @@ class Graphic:
                 pg.draw.circle(self.screen, o.color, (zoomx, zoomy), o.radius * self.zoom)
 
     def display(self, circle):
-        """need to refactor this method"""
         self.screen.fill((0, 0, 0))
 
         self.screen.blit(self.milkyway_img, (0, 0))
