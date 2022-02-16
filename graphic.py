@@ -127,6 +127,6 @@ class Graphic:
         self.background.draw(self.screen, self.WIDTH, self.HEIGHT)
 
         self.draw_circle(circle)
-
+        self.draw_interface()
         pg.display.update()
         self.clock.tick(self.FPS)
