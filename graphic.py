@@ -4,7 +4,6 @@ import pygame as pg
 
 folder_path = os.path.dirname(__file__)
 picture_folder = os.path.join(folder_path, 'image')
-
 milkyway = pg.image.load(os.path.join(picture_folder, 'milkyway.jpg'))
 
 
@@ -60,7 +59,6 @@ class BackgroundStars:
 
 
 class Graphic:
-
     pg.display.set_caption("Astro dynamics")
 
     def __init__(self, width, height):
@@ -100,31 +98,32 @@ class Graphic:
         text_img = self.font.render(text, True, color)
         self.screen.blit(text_img, pos)
 
-    def display(self, circle):
-        """need to refactor this method"""
-        self.screen.fill((0, 0, 0))
-        self.screen.blit(self.milkyway_img, (0, 0))
+    def draw_interface(self):
+        self.blit_text(f'fps: {int(self.clock.get_fps())}', (10, 10))
+        self.blit_text(f'zoom: {round(self.zoom, 3)}', (10, 30))
+        self.blit_text('to move cam press (up) (down) (left) (right) button', (self.WIDTH - 250, 10))
+        self.blit_text('to zoom press (home) (end) button', (self.WIDTH - 176, 30))
 
-        self.background.draw(self.screen, self.WIDTH, self.HEIGHT)
-    # ------------------------------------zoom-display--------------------------------------
-
-        for obj in circle:
-            normal_x = self.zoom * (-(self.WIDTH / 2) + (obj.x - self.cam_x))
-            normal_y = self.zoom * ((self.HEIGHT / 2) - (obj.y - self.cam_y))
+    def draw_circle(self, obj):
+        for o in obj:
+            normal_x = self.zoom * (-(self.WIDTH / 2) + (o.x - self.cam_x))
+            normal_y = self.zoom * ((self.HEIGHT / 2) - (o.y - self.cam_y))
             zoomx = 1200 / 2 + normal_x
             zoomy = 800 / 2 - normal_y
 
             if zoomx > self.WIDTH or zoomx < 0 or zoomy > self.HEIGHT or 0 > zoomy:
                 pass
             else:
-                pg.draw.circle(self.screen, obj.color, (zoomx, zoomy), obj.radius * self.zoom)
+                pg.draw.circle(self.screen, o.color, (zoomx, zoomy), o.radius * self.zoom)
 
-    # ---------------------------------------------------------------------------------------
+    def display(self, circle):
+        """need to refactor this method"""
+        self.screen.fill((0, 0, 0))
 
-        self.blit_text(f'fps: {int(self.clock.get_fps())}', (10, 10))
-        self.blit_text(f'zoom: {round(self.zoom, 3)}', (10, 30))
-        self.blit_text('to move cam press (up) (down) (left) (right) button', (self.WIDTH - 250, 10))
-        self.blit_text('to zoom press (home) (end) button', (self.WIDTH - 176, 30))
+        self.screen.blit(self.milkyway_img, (0, 0))
+        self.background.draw(self.screen, self.WIDTH, self.HEIGHT)
+
+        self.draw_circle(circle)
 
         pg.display.update()
         self.clock.tick(self.FPS)
